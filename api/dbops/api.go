@@ -3,7 +3,7 @@ package dbops
 import (
 	"log"
 	"database/sql"
-	"github.com/go-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 )
 
 func AddUserCredential(loginName string, pwd string) error {
