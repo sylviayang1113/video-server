@@ -2,7 +2,7 @@ package dbops
 
 import (
 	"database/sql"
-	"github.com/go-sql-driver/mysql"
+	_"github.com/go-sql-driver/mysql"
 )
 
 
