@@ -2,12 +2,12 @@ package utils
 
 import (
 	"crypto/rand"
-	"io"
 	"fmt"
+	"io"
 )
 
 func NewUUID(string, error) {
-	uuid := make(byte[], 16)
+	uuid := make([]byte, 16)
 	n, err := io.ReadFull(rand.Reader, uuid)
 	if n != len(uuid) || err != nil {
 		return "", err
