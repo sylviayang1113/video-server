@@ -5,8 +5,8 @@ import (
 	"log"
 	"database/sql"
 	_"github.com/go-sql-driver/mysql"
-	"github.com/interesting1113/video_server/defs"
-	"github.com/interesting1113/video_server/utils"
+	"github.com/interesting1113/video_server/api/defs"
+	"github.com/interesting1113/video_server/api/utils"
 )
 
 func AddUserCredential(loginName string, pwd string) error {
@@ -81,12 +81,13 @@ func AddNewVideo(aid int, name string) (*defs.VideoInfo, error) {
 	res := &defs.VideoInfo{Id: vid, AuthorId: aid, Name: name, DisplayCtime: ctime}
 
 	defer stmtIns.Close()
+
 	return res, nil
 }
 
 
 func GetVideoInfo(vid string) (*defs.VideoInfo, error) {
-	stmtOut, err := dbConn.Prepare("SELECT author_id, name, display_time FROM video_info WHERE id=?")
+	stmtOut, err := dbConn.Prepare("SELECT author_id, name, display_time FROM video_info WHERE id = ?")
 
 	var aid int
 	var dct string
@@ -146,7 +147,7 @@ func ListVideoInfo(uname string, from, to int) ([]*defs.VideoInfo, error) {
 
 
 func DeleteVideoInfo(vid string) error {
-	stmtDel, err = stmtDel.Prepare("DELETE FROM video_info WHERE id=?")
+	stmtDel, err = stmtDel.Prepare("DELETE FROM video_info WHERE id = ?")
 	if err != nil {
 		return err
 	}
@@ -157,6 +158,7 @@ func DeleteVideoInfo(vid string) error {
 	}
 
 	defer stmtDel.Close()
+
 	return nil
 }
 
@@ -178,6 +180,7 @@ func addNewComments(vid string, aid int, content string) error {
 		return err
 	}
 	defer stmtIns.Close()
+
 	return nil
 }
 
@@ -203,5 +206,6 @@ func ListComments(vid string, from, to int) ([]*defs.Comment, error) {
 			res = append(res, c)
 		}
 		defer stmtOut.Close()
+
 		return res, nil
 }
