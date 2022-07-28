@@ -31,6 +31,20 @@ func ReadVideoDeletionRecord(count int) ([]string, error) {
 	 return ids, nil
 }
 
+func DelVideoDeletionRecord(vid string) error {
+	stmtDel, err := dbConn.Prepare("DELETE FROM video_del_rec WHERE video_id=?")
+	if err != nil {
+		return err
+	}
+	_, err = stmtDel.Exec(vid)
+	if err != nil {
+		log.Printf("Deleting VideoDeletionRecord error: %v", err)
+		return err
+	}
+
+	defer stmtDel.Close()
+	return nil
+}
 
 
 
