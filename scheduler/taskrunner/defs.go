@@ -5,6 +5,7 @@ const (
 	READ_TO_EXECUTE = "e"
 	CLOSE = "c"
 
+	VIDES_PATH = "./videos/"
 )
 
 type controlChan chan string
