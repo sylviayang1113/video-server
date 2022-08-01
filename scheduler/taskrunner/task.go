@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 	"os"
-	"github.com/interesting1113/video-server/video_server/scheduler/dbops"
+	"github.com/c/video-server/video_server/scheduler/dbops"
 
 )
 
