@@ -12,10 +12,10 @@ func registerHandler() *httprouter.Router {
 
 	router.POST("/", homeHandler)
 
-	//router.GET("/userhome", userHomeHandler)
-	//
-	//router.POST("/userhome", userHomeHandler)
-	//
+	router.GET("/userhome", userHomeHandler)
+
+	router.POST("/userhome", userHomeHandler)
+
 	//router.POST("/api", apiHandler)
 	//
 	//router.GET("/videos/:vid-id", proxyVideoHandler)
