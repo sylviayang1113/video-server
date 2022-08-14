@@ -14,8 +14,8 @@ func InsertSession(sid string, ttl int64, uname string) error {
 		return err
 	}
 
-	_, err *= stmtIns.Exec(sid, ttlstr, login_name)
-	f err != nil {
+	_, err = stmtIns.Exec(sid, ttlstr, uname)
+	if err != nil {
 		return err
 	}
 

@@ -23,13 +23,25 @@ func deleteExpiredSession(sid string) {
 	dbops.DeleteSession(sid)
 }
 
+func LoadSessionsFromDB()  {
+	r, err := dbops2.RetrieveAllSessions()
+	if err != nil {
+		return
+	}
+	r.Range(func(k, v interface{}) bool {
+		ss := v.(*defs.SimpleSession)
+		sessionMap.Store(k, ss)
+		return true
+	})
+}
+
 func LoadSessionFromDB() {
 	r, err := dbops.RetrieveAllSessions()
 	if err != nil {
 		return 
 	}
 
-	r.Range(func (k, v interface{} bool{
+	r.Range(func (k, v interface{}) bool{
 		ss := v.(*defs.SimpleSession)
 		sessionMap.Store(k, ss)
 		return true
