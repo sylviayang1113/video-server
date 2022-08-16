@@ -68,5 +68,19 @@ func Login(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	} else {
 		sendNormalResponse(w, string(resp), 200)
 	}
-
 }
+
+func GetUserInfo(w http.ResponseWriter, r *http.Request, p httprouter.Params)  {}
+
+
+func AddNewVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
+
+
+func ListAllVideos(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
+
+func DeleteVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
+
+
+func PostComment(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
+
+func ShowComments(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
