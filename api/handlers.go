@@ -70,7 +70,27 @@ func Login(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	}
 }
 
-func GetUserInfo(w http.ResponseWriter, r *http.Request, p httprouter.Params)  {}
+func GetUserInfo(w http.ResponseWriter, r *http.Request, p httprouter.Params)  {
+	if !validateUser(w, r) {
+		log.Printf("Unathorized user \n")
+		return
+	}
+
+	uname := p.ByName("username")
+	u, err := dbops.GetUser(uname)
+	if err != nil {
+		log.Printf("Error in GetUserInfo: %s", err)
+		sendErrorResponse(w, defs.ErrorDBError)
+	}
+
+	ui := &defs.UserInfo{Id: u.Id}
+
+	if resp, err := json.Marshal(ui); err != nil {
+		sendErrorResponse(w, defs.ErrorInternalFaults)
+	} else {
+		sendNormalResponse(w, string(resp), 200)
+	}
+}
 
 
 func AddNewVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
