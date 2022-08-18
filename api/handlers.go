@@ -71,7 +71,7 @@ func Login(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 }
 
 func GetUserInfo(w http.ResponseWriter, r *http.Request, p httprouter.Params)  {
-	if !validateUser(w, r) {
+	if !ValidateUser(w, r) {
 		log.Printf("Unathorized user \n")
 		return
 	}
@@ -93,7 +93,34 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request, p httprouter.Params)  {
 }
 
 
-func AddNewVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
+func AddNewVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	if !ValidateUser(w, r) {
+		log.Printf("Unathorized user \n")
+		return
+	}
+
+	res, _ := ioutil.ReadAll(r.Body)
+	nvbody := &defs.NewVideo{}
+	if err := json.Unmarshal(res, nvbody); err != nil {
+		log.Printf("%s", err)
+		sendErrorResponse(w, defs.ErrorRequestBodyParseFailed)
+		return
+	}
+
+	vi, err := dbops.AddNewVideo(nvbody.AuthorId, nvbody.Name)
+	log.Printf("Author id : %d, name: %s \n", nvbody.AuthorId, nvbody.Name)
+	if err != nil {
+		log.Printf("Error in AddNewVideo: %s", err)
+		sendErrorResponse(w, defs.ErrorDBError)
+		return
+	}
+
+	if resp, err := json.Marshal(vi); err != nil {
+		sendErrorResponse(w, defs.ErrorInternalFaults)
+	} else {
+		sendNormalResponse(w, string(resp), 201)
+	}
+}
 
 
 func ListAllVideos(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
