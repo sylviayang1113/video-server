@@ -5,8 +5,8 @@ import (
 	"log"
 	"database/sql"
 	_"github.com/go-sql-driver/mysql"
-	"github.com/interesting1113/video_server/api/defs"
-	"github.com/interesting1113/video_server/api/utils"
+	"github.com/interesting1113/video-server.git/api/defs"
+	"github.com/interesting1113/video-server.git/api/utils"
 )
 
 func AddUserCredential(loginName string, pwd string) error {

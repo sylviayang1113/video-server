@@ -1,15 +1,15 @@
 package main
 
 import (
-	"io"
+	"encoding/json"
+	"github.com/interesting1113/video-server.git/api/utils"
+	"github.com/interesting1113/video-server.git/api/dbops"
+	"github.com/interesting1113/video-server.git/api/defs"
+	"github.com/interesting1113/video-server.git/api/session"
+	"github.com/julienschmidt/httprouter"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"encoding/json"
-	"github.com/julienschmidt/httprouter"
-	"github.com/interesting1113/video_server/api/defs"
-	"github.com/interesting1113/video_server/api/dbops"
-	"github.com/interesting1113/video_server/api/session"
 )
 
 func CreateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -17,7 +17,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	ubody := &defs.UserCredential{}
 
 	if err := json.Unmarshal(res, ubody); err != nil {
-		sendErrorResponse(q, defs.ErrorRequestBodyParseFailed)
+		sendErrorResponse(w, defs.ErrorRequestBodyParseFailed)
 		return 
 	}
 
@@ -123,9 +123,43 @@ func AddNewVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 }
 
 
-func ListAllVideos(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
+func ListAllVideos(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	if !ValidateUser(w, r) {
+		return
+	}
 
-func DeleteVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
+	uname := p.ByName("username")
+	vs, err := dbops.ListVideoInfo(uname, 0, utils.GetCurrentTimestampSec())
+	if err != nil {
+		log.Printf("Error in ListAllvideos: %s", err)
+		sendErrorResponse(w, defs.ErrorDBError)
+		return
+	}
+
+	vsi := &defs.VideosInfo{Videos: vs}
+	if resp, err := json.Marshal(vsi); err != nil {
+		sendErrorResponse(w, defs.ErrorInternalFaults)
+	} else {
+		sendNormalResponse(w, string(resp), 200)
+	}
+}
+
+func DeleteVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	if !ValidateUser(w, r) {
+		return
+	}
+
+	vid := p.ByName("vid-id")
+	err := dbops.DeleteVideoInfo(vid)
+	if err != nil {
+		log.Printf("Error in DeletVideo: %s", err)
+		sendErrorResponse(w, defs.ErrorDBError)
+		return
+	}
+
+	go utils.SendDeleteVideoRequest(vid)
+	sendNormalResponse(w, "", 204)
+}
 
 
 func PostComment(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
