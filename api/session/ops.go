@@ -24,7 +24,7 @@ func deleteExpiredSession(sid string) {
 }
 
 func LoadSessionsFromDB()  {
-	r, err := dbops2.RetrieveAllSessions()
+	r, err := dbops.RetrieveAllSessions()
 	if err != nil {
 		return
 	}

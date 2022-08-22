@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/avenssi/interesting1113/api/session"
+	"github.com/interesting1113/video-server.git/api/session"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 )

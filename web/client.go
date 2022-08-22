@@ -6,9 +6,8 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
-	"net/url"
+	_"net/url"
 	"encoding/json"
-	"interesting1113/config"
 )
 
 var httpClient *http.Client

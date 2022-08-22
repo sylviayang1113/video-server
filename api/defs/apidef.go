@@ -58,3 +58,14 @@ type SimpleSession struct {
 	Username string // login name
 	TTL int64
 }
+
+type User struct {
+	Id int
+	LoginName string
+	Pwd string
+}
+
+type NewVideo struct {
+	AuthorId int `json:"author_id"`
+	Name string `json:"name"`
+}

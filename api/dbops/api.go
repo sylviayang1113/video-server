@@ -58,6 +58,9 @@ func DeleteUser(loginName string, pwd string) error {
 	return nil
 }
 
+func GetUser(loginName string) (*defs.User, error)  {
+	
+}
 func AddNewVideo(aid int, name string) (*defs.VideoInfo, error) {
 	// create uuid
 	vid, err := utils.NewUUID()
