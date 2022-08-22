@@ -1,8 +1,9 @@
 package dbops
 
 import (
+	"log"
 	"sync"
-	"github.com/interesting1113/video_server/api/defs"
+	"github.com/interesting1113/video-server.git/api/defs"
 	"strconv"
 	"database/sql"
 )
