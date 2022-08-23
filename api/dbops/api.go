@@ -132,7 +132,7 @@ func ListVideoInfo(uname string, from, to int) ([]*defs.VideoInfo, error) {
 	}
 
 	for rows.Next() {
-		var id, name, ctime, string
+		var id, name, ctime string
 		var aid int
 		if err := rows.Scan(&id, &aid, &name, &ctime); err != nil {
 			return res, err

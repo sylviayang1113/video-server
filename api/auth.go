@@ -1,8 +1,9 @@
 package main
 
 import (
+	"github.com/interesting1113/video-server.git/api/defs"
 	"net/http"
-	"github.com/interesting1113/video_server/api/session"
+	"github.com/interesting1113/video-server.git/api/session"
 )
 var HEADER_FIELD_SESSION = "X-Session-Id"
 var HEADER_FIELD_UNAME = "X-User-Name"
@@ -25,7 +26,7 @@ func validateUserSession(r *http.Request) bool {
 func ValidateUser(w http.ResponseWriter, r *http.Request) bool {
 	uname := r.Header.Get(HEADER_FIELD_UNAME)
 	if len(uname) == 0 {
-		sendErrorResponse()
+		sendErrorResponse(w, defs.ErrorNotAuthUser)
 		return false
 	}
 

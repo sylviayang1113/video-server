@@ -41,7 +41,7 @@ func Login(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	ubody := &defs.UserCredential{}
 	if err := json.Unmarshal(res, ubody); err != nil {
 		log.Printf("%s", err)
-		sendErrorResponse((w, defs.ErrorRequestBodyParseFailed)
+		sendErrorResponse(w, defs.ErrorRequestBodyParseFailed)
 		return
 	}
 
@@ -157,7 +157,7 @@ func DeleteVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		return
 	}
 
-	go utils.SendDeleteVideoRequest(vid)
+	go utils.SendVideoDeleteRequest(vid)
 	sendNormalResponse(w, "", 204)
 }
 
