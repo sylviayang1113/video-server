@@ -164,4 +164,23 @@ func DeleteVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 func PostComment(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
 
-func ShowComments(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
+func ShowComments(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	if !ValidateUser(w, r) {
+		return
+	}
+
+	vid := p.ByName("vid-id")
+	cm, err := dbops.ListComments(vid, 0, utils.GetCurrentTimestampSec())
+	if err != nil {
+		log.Printf("Error in ShowComments: %s", err)
+		sendErrorResponse(w, defs.ErrorDBError)
+		return
+	}
+
+	cms := &defs.Comments{Comments: cm}
+	if resp, err := json.Marshal(cms); err != nil {
+		sendErrorResponse(w, defs.ErrorInternalFaults)
+	} else {
+		sendNormalResponse(w, string(resp), 200)
+	}
+}
