@@ -162,7 +162,28 @@ func DeleteVideo(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 }
 
 
-func PostComment(w http.ResponseWriter, r *http.Request, p httprouter.Params) {}
+func PostComment(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	if !ValidateUser(w, r) {
+		return
+	}
+
+	reqBody, _ := ioutil.ReadAll(r.Body)
+
+	cbody := &defs.NewComment{}
+	if err := json.Unmarshal(reqBody, cbody); err != nil {
+		log.Printf("%s", err)
+		sendErrorResponse(w, defs.ErrorRequestBodyParseFailed)
+		return
+	}
+
+	vid := p.ByName("vid-id")
+	if err := dbops.AddNewComments(vid, cbody.AuthorId, cbody.Content); err != nil {
+		log.Printf("Error in PostComment: %s", err)
+		sendErrorResponse(w, defs.ErrorDBError)
+	} else {
+		sendNormalResponse(w, "ok", 201)
+	}
+}
 
 func ShowComments(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	if !ValidateUser(w, r) {

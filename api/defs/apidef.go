@@ -6,6 +6,11 @@ type UserCredential struct {
 	Pwd string `json: "pwd"`
 }
 
+type NewComment struct {
+	AuthorId int `json:"author_id"`
+	Content string `json:"content"`
+}
+
 // response
 type SignedUp struct {
 	Success bool `json: "success"`

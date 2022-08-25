@@ -1,10 +1,10 @@
 package dbops
 
 import (
-	"encoding/json"
-	"github.com/interesting1113/video-server.git/scheduler/dbops"
-	"github.com/julienschmidt/httprouter"
-	"net/http"
+	_ "encoding/json"
+	_ "github.com/interesting1113/video-server.git/scheduler/dbops"
+	_ "github.com/julienschmidt/httprouter"
+	_ "net/http"
 	"time"
 	"log"
 	"database/sql"
@@ -63,8 +63,9 @@ func DeleteUser(loginName string, pwd string) error {
 }
 
 func GetUser(loginName string) (*defs.User, error)  {
-	
+
 }
+
 func AddNewVideo(aid int, name string) (*defs.VideoInfo, error) {
 	// create uuid
 	vid, err := utils.NewUUID()
@@ -94,15 +95,14 @@ func AddNewVideo(aid int, name string) (*defs.VideoInfo, error) {
 
 
 func GetVideoInfo(vid string) (*defs.VideoInfo, error) {
-	stmtOut, err := dbConn.Prepare("SELECT author_id, name, display_time FROM video_info WHERE id = ?")
+	stmtOut, err := dbConn.Prepare("SELECT author_id, name, display_ctime FROM video_info WHERE id=?")
 
 	var aid int
 	var dct string
 	var name string
 
-
 	err = stmtOut.QueryRow(vid).Scan(&aid, &name, &dct)
-	if err != nil && err != sql.ErrNoRows {
+	if err != nil && err != sql.ErrNoRows{
 		return nil, err
 	}
 
@@ -112,7 +112,7 @@ func GetVideoInfo(vid string) (*defs.VideoInfo, error) {
 
 	defer stmtOut.Close()
 
-	res := &defs.VideoInfo(Id: vid, AuthorId: aid, Name: name, DisplayCtime: dct)
+	res := &defs.VideoInfo{Id: vid, AuthorId: aid, Name: name, DisplayCtime: dct}
 
 	return res, nil
 }
@@ -154,7 +154,7 @@ func ListVideoInfo(uname string, from, to int) ([]*defs.VideoInfo, error) {
 
 
 func DeleteVideoInfo(vid string) error {
-	stmtDel, err = stmtDel.Prepare("DELETE FROM video_info WHERE id = ?")
+	stmtDel, err := dbConn.Prepare("DELETE FROM video_info WHERE id=?")
 	if err != nil {
 		return err
 	}
@@ -165,7 +165,6 @@ func DeleteVideoInfo(vid string) error {
 	}
 
 	defer stmtDel.Close()
-
 	return nil
 }
 
@@ -175,19 +174,17 @@ func addNewComments(vid string, aid int, content string) error {
 		return err
 	}
 
-	stmtIns, err := dbConn.Prepare("INSERT INTO comments 
-		(id, video_id, author_id, content) VALUES (?, ?, ?, ?)")
-
-	if err != nil {
-		return err
-	}	
-
-	_, err := stmtIns.Exec(id, vid, aid, content)
+	stmtIns, err := dbConn.Prepare("INSERT INTO comments (id, video_id, author_id, content) values (?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
-	defer stmtIns.Close()
 
+	_, err = stmtIns.Exec(id, vid, aid, content)
+	if err != nil {
+		return err
+	}
+
+	defer stmtIns.Close()
 	return nil
 }
 
