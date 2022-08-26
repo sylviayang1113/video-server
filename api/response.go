@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 	"encoding/json"
-	"github.com/interesting1113/video_server/api/defs"
+	"github.com/interesting1113/video-server.git/api/defs"
 )
 
 func sendErrorResponse(w http.ResponseWriter, errResp defs.ErrResponse) {

@@ -45,7 +45,7 @@ func LoadSessionFromDB() {
 		ss := v.(*defs.SimpleSession)
 		sessionMap.Store(k, ss)
 		return true
-	}))
+	})
 }
 
 func GenerateNewSessionId(un string) string {
