@@ -4,8 +4,11 @@ import (
 	"crypto/rand"
 	"fmt"
 	"io"
+	"log"
+	"net/http"
 	"strconv"
 	"time"
+	"github.com/interesting1113/video-server.git/web/config"
 )
 
 func NewUUID(string, error) {
@@ -27,5 +30,10 @@ func GetCurrentTimestampSec() int{
 }
 
 func SendVideoDeleteRequest(id string)  {
-
+	addr := config.GetLbAddr() + ":9001"
+	url := "http://" + addr + "/video-delete-record/" + id
+	_, err := http.Get(url)
+	if err != nil {
+		log.Printf("Sending deleting video request error: %s", err)
+	}
 }
