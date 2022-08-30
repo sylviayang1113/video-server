@@ -27,3 +27,7 @@ func init() {
 func GetLbAddr() string {
 	return configuration.LBAddr
 }
+
+func GetOssAddr() string {
+	return configuration.OssAddr
+}
